@@ -1,0 +1,21 @@
+{
+amount:300
+emission rate:5.000000
+texture:Resources\Textures\PARTICLE.png
+dimensions:1.000000,20.000000
+velocity:1000.000000
+angle:20
+angle offset:0
+randmise angle:0
+max_life_time:1.500000
+emitter pos:-203.000000,-34.000000
+emitter dim:1920.000000,20.000000
+opacity over lifetime:0.500000,0.500000,0.500000
+opacity rate of change:0.100000,0.100000
+colour rate of change:1.000000,1.000000,1.000000,1.000000
+colour 1:0.392000,0.584000,0.929000
+colour 2:0.392000,0.584000,0.929000
+colour 3:0.392000,0.584000,0.929000
+colour 4:0.392000,0.584000,0.929000
+colour 5:0.392000,0.584000,0.929000
+}

@@ -1,0 +1,2 @@
+Resources\TxtFiles\SpriteTxtFiles\\Fire\spark.txt
+Resources\TxtFiles\SpriteTxtFiles\\Fire\flame.txt

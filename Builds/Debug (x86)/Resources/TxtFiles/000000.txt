@@ -1,0 +1,4 @@
+Resources\\TxtFiles\\SpriteTxtFiles\\Rain\\clouds.txt
+Resources\\TxtFiles\\SpriteTxtFiles\\Rain\\rainDrops.txt
+Resources\\TxtFiles\\SpriteTxtFiles\\Rain\\splashes.txt
+Resources\\TxtFiles\\SpriteTxtFiles\\Rain\\ripples.txt

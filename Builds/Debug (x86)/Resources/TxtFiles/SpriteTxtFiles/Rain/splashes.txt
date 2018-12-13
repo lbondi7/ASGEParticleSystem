@@ -1,0 +1,10 @@
+{
+texture:Resources\\Textures\\blankTexture.png
+density:100
+colour_red:0.0
+colour_green:0.0
+colour_blue:1.0
+dimensions:2,2
+position:0,0
+life_span:0.3
+}

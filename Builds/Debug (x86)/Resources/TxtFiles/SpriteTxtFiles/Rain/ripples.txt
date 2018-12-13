@@ -1,0 +1,13 @@
+{
+texture:Resources\\Textures\\ripple1.png
+texture:Resources\\Textures\\ripple2.png
+texture:Resources\\Textures\\ripple3.png
+texture:Resources\\Textures\\ripple4.png
+texture:Resources\\Textures\\ripple5.png
+texture:Resources\\Textures\\ripple6.png
+colour_red:0.0
+colour_green:0.0
+colour_blue:1.0
+texture_number:2
+texture_delay:0.15
+}

@@ -1,0 +1,8 @@
+{
+texture:Resources\Textures\cloud.png
+colour_red:0.0
+colour_green:0.0
+colour_blue:0.0
+dimensions:210,90
+position:240,100
+}
