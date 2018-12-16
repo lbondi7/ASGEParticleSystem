@@ -27,9 +27,9 @@ bool ParticleSystem::init(ASGE::Renderer * renderer, ASGE::Input * input_, std::
 		for (int j = 0; j < particle_density; j++)
 		{
 			particle[j]->createParticle(renderer, file);
-			particle[j]->particleActive(false);
+			particle[j]->Active(false);
 		}
-		particle[0]->particleActive(true);
+		particle[0]->Active(true);
 		particle_num++;
 		return true;
 	}
@@ -47,9 +47,9 @@ bool ParticleSystem::setParticles(std::string &type, ASGE::Renderer * renderer)
 		for (int j = 0; j < particle_density; j++)
 		{
 			particle[j]->createParticle(renderer, file);
-			particle[j]->particleActive(false);
+			particle[j]->Active(false);
 		}
-		particle[0]->particleActive(true);
+		particle[0]->Active(true);
 		particle_num++;
 		return true;
 	}
@@ -74,7 +74,7 @@ void ParticleSystem::update(float dt, int sel_part_sys, float x_dif, float y_dif
 		float checker = (1.0f / emission_rate);
 		if (time > checker && particle_num < particle_density)
 		{
-			particle[particle_num]->particleActive(true);
+			particle[particle_num]->Active(true);
 			particle_num++;
 			time = 0.0f;
 		}
@@ -86,7 +86,7 @@ void ParticleSystem::update(float dt, int sel_part_sys, float x_dif, float y_dif
 		//}
 		for (int i = 0; i < particle_num; i++)
 		{
-			if (particle[i]->particleActive())
+			if (particle[i]->Active())
 			{
 				particle[i]->updateParticle(dt, *world_offset[0], *world_offset[1]);
 			}
@@ -100,7 +100,7 @@ void ParticleSystem::render(ASGE::Renderer * renderer)
 	{
 		for (int i = 0; i < particle_num; i++)
 		{
-			if (particle[i]->particleActive())
+			if (particle[i]->Active())
 			{
 				particle[i]->render(renderer);
 			}

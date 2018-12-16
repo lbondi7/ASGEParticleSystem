@@ -1,21 +1,47 @@
-{
-amount:300
-emission rate:5.000000
-texture:Resources\Textures\PARTICLE.png
-dimensions:1.000000,20.000000
-velocity:1000.000000
-angle:20
-angle offset:0
-randmise angle:0
-max_life_time:1.500000
-emitter pos:-203.000000,-34.000000
-emitter dim:1920.000000,20.000000
-opacity over lifetime:0.500000,0.500000,0.500000
-opacity rate of change:0.100000,0.100000
-colour rate of change:1.000000,1.000000,1.000000,1.000000
-colour 1:0.392000,0.584000,0.929000
-colour 2:0.392000,0.584000,0.929000
-colour 3:0.392000,0.584000,0.929000
-colour 4:0.392000,0.584000,0.929000
-colour 5:0.392000,0.584000,0.929000
-}
+{PARTICLE DATA}
+{Particle System}
+amount:200;
+emission rate:5.000000;
+~~~~~~~~~~~
+{Texture}
+texture:Resources\Textures\PARTICLE.png;
+~~~~~~~~~~~
+{Dimensions}
+dimensions:1.000000,20.000000;
+~~~~~~~~~~~
+{Velocity}
+velocity:300.000000;
+~~~~~~~~~~~
+{Direction(Angle)}
+angle:20.000000;
+angle offset:0.000000;
+randomise angle:0;
+~~~~~~~~~~~
+{Lifetime}
+max_life_time:1.000000;
+~~~~~~~~~~~
+{Opacity}
+opacity over lifetime:1.000000,1.000000,1.000000;
+opacity rate of change:10.000000,1.000000;
+~~~~~~~~~~~
+{Colour}
+colour rate of change:1.000000,1.000000,1.000000,1.000000;
+colour 1:1.000000,1.000000,0.000000;
+colour 2:1.000000,0.647000,0.000000;
+colour 3:1.000000,0.000000,0.000000;
+colour 4:0.000000,0.000000,1.000000;
+colour 5:0.000000,0.502000,0.000000;
+~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+{EMITTER DATA}
+{Emitter Type}
+emitter type(rectangle):0;
+~~~~~~~~~~~
+{Position}
+emitter position:1000.000000,200.000000;
+~~~~~~~~~~~
+{Dimensions}
+emitter dimensions:500.000000,20.000000;
+~~~~~~~~~~~
+

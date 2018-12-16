@@ -1,6 +1,6 @@
-Resources\\Textures\\BLANK_TEXTURE.png
-Resources\\Textures\\CHOCO.png
-Resources\\Textures\\CLOUD.png
-Resources\\Textures\\GRASS.png
-Resources\\Textures\\OK.png
-Resources\\Textures\\PARTICLE.png
+texture1:Resources\Textures\BLANK_TEXTURE.png
+texture2:Resources\Textures\CHOCO.png
+texture3:Resources\Textures\CLOUD.png
+texture4:Resources\Textures\GRASS.png
+texture5:Resources\Textures\OK.png
+texture6:Resources\Textures\PARTICLE.png

@@ -111,6 +111,25 @@ void AngryBirdsGame::update(const ASGE::GameTime& us)
 				file_names.push_back(scenes[current_scene]->addFilename());
 				FileSystem file;
 				file.editFile(file_names);
+				file_names.clear();
+				file.getTxtFileContent("particleNames");
+				for (int i = 0; i < file.retrieveContentSize(); i++)
+				{
+					file_names.push_back(file.retrieveContent(i));
+				}
+				for (int i = 0; i < scenes.size(); i++)
+				{
+					scenes[i].reset();
+				}
+				scenes[0] = std::unique_ptr<MenuScene>(new MenuScene);
+				scenes[1] = std::unique_ptr<SimulationScene>(new SimulationScene);
+				scenes[2] = std::unique_ptr<GameScene>(new GameScene);
+				scenes[3] = std::unique_ptr<EditorScene>(new EditorScene);
+				for (int i = 0; i < scenes.size(); i++)
+				{
+					if (!scenes[i]->init(renderer.get(), inputs.get(), file_names))
+						signalExit();
+				}
 			}
 			current_scene = CurrentScene::MENU_SCENE;
 		}
@@ -130,14 +149,6 @@ void AngryBirdsGame::update(const ASGE::GameTime& us)
 		{
 			if (!scenes[i]->init(renderer.get(), inputs.get(), file_names))
 				signalExit();
-		}
-
-		file_names.clear();
-		FileSystem file;
-		file.getTxtFileContent("particleNames");
-		for (int i = 0; i < file.retrieveContentSize(); i++)
-		{
-			file_names.push_back(file.retrieveContent(i));
 		}
 
 		break;

@@ -54,6 +54,9 @@ public:
 
 	 std::string getTexture();
 
+	 void Active(bool value);
+
+	 bool Active();
 
 
 private:
@@ -62,4 +65,5 @@ private:
 	SpriteComponent* sprite_component = nullptr;
 	std::string tag = " ";
 	std::string texture = " ";
+	bool active = false;
 };

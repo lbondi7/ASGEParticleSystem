@@ -161,17 +161,17 @@ Scene::NextScene GameScene::update(float dt)
 void GameScene::render(ASGE::Renderer * renderer)
 {
 
-	if (new_particle_system)
-	{
-		generateParticleSystem(renderer, input);
-	}
+	//if (new_particle_system)
+	//{
+	//	generateParticleSystem(renderer, input);
+	//}
 
 	renderer->setClearColour(ASGE::COLOURS::BLACK);
-	player->render(renderer);
 	for (int i = 0; i < particle_systems_amount; i++)
 	{
 		particle_system[i]->render(renderer);
 	}
+	player->render(renderer);
 	for (int i = 0; i < PLATFORM_AMOUNT; i++)
 	{
 		platforms[i]->render(renderer);
@@ -199,6 +199,10 @@ void GameScene::keyHandler(const ASGE::KeyEvent* event)
 		if (event->mods == 1 && event->key == ASGE::KEYS::KEY_MINUS)
 		{
 			user_input += "_";
+		}
+		else if (event->mods == 1 && event->key == ASGE::KEYS::KEY_EQUAL)
+		{
+			user_input += "+";
 		}
 		else if (event->key >= ASGE::KEYS::KEY_A && event->key <= ASGE::KEYS::KEY_Z || event->key >= ASGE::KEYS::KEY_0 && event->key <= ASGE::KEYS::KEY_9 || event->key == ASGE::KEYS::KEY_MINUS)
 		{

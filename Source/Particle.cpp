@@ -28,21 +28,13 @@ void Particle::createParticle(ASGE::Renderer* renderer, FileSystem file)
 		x++;
 		velocity = std::stof(file.retrieveContent(x));
 		x++;
-		max_angle = std::stoi(file.retrieveContent(x));
+		max_angle = std::stof(file.retrieveContent(x));
 		x++;
-		angle_offset = std::stoi(file.retrieveContent(x));
+		angle_offset = std::stof(file.retrieveContent(x));
 		x++;
 		randomise_angle = std::stoi(file.retrieveContent(x));
 		x++;
 		max_life_time = std::stof(file.retrieveContent(x));
-		x++;
-		emitter.x = std::stof(file.retrieveContent(x));
-		x++;
-		emitter.y = std::stof(file.retrieveContent(x));
-		x++;
-		emitter.length = std::stof(file.retrieveContent(x));
-		x++;
-		emitter.height = std::stof(file.retrieveContent(x));
 		x++;
 		target_opacity[0] = std::stof(file.retrieveContent(x));
 		x++;
@@ -73,57 +65,149 @@ void Particle::createParticle(ASGE::Renderer* renderer, FileSystem file)
 			x++;
 			j++;
 		}
-		life_time = max_life_time;
+		emitter_type = (EmitterType)std::stoi(file.retrieveContent(x));
+		x++;
+		emitter.x = std::stof(file.retrieveContent(x));
+		x++;
+		emitter.y = std::stof(file.retrieveContent(x));
+		x++;
+		emitter.length = std::stof(file.retrieveContent(x));
+		x++;
+		emitter.height = std::stof(file.retrieveContent(x));
+		x++;
+		donut_width = std::stof(file.retrieveContent(x));
+		x++;
 		spriteComponent()->getSprite()->colour(target_colour[0]);
 		opacity = target_opacity[0];
 
-		std::random_device rd;
-		std::uniform_real_distribution<float> x_dist(emitter.x, emitter.x + emitter.length);
-		std::uniform_real_distribution<float> y_dist(emitter.y, emitter.y + emitter.height);
-		spriteComponent()->getSprite()->xPos(x_dist(rd));
-		spriteComponent()->getSprite()->yPos(y_dist(rd));
-
+		setEmitter();
 		resetAngle();
 	}
 }
 
-void Particle::alterParticle(ASGE::Renderer* renderer, std::string texture, float width, float height, float v, int m_a, int a_o, bool r_a, float l, float e_x, float e_y, float e_l, float e_h, std::vector<float> t_o, std::vector<float> o_c_r, std::vector<ASGE::Colour> colours, std::vector<float> c_c_r)
+void Particle::alterParticle(std::string texture, float width, float height, float v, int m_a, int a_o, bool r_a, float l, float e_x, float e_y, float e_l, float e_h, std::vector<float> t_o, std::vector<float> o_c_r, std::vector<ASGE::Colour> colours, std::vector<float> c_c_r)
 {
-	spriteComponent()->getSprite()->loadTexture(texture);
-	spriteComponent()->getSprite()->width(width);
-	spriteComponent()->getSprite()->height(height);
-	velocity = v;
-	max_angle = m_a;
-	angle_offset = a_o;
-	randomise_angle = r_a;
-	max_life_time = l;
-	life_time = max_life_time;
-	emitter.x = e_x;
-	emitter.y = e_y;
-	emitter.length = e_l;
-	emitter.height = e_h;
-	target_opacity = t_o;
-	opacity_change_rate = o_c_r;
-	target_colour = colours;
-	colour_change_rate = c_c_r;
-	opacity = target_opacity[0];
 
-	std::random_device rd;
-	std::uniform_real_distribution<float> x_dist(emitter.x, emitter.x + emitter.length);
-	std::uniform_real_distribution<float> y_dist(emitter.y, emitter.y + emitter.height);
-	spriteComponent()->getSprite()->xPos(x_dist(rd));
-	spriteComponent()->getSprite()->yPos(y_dist(rd));
 
 	resetAngle();
 }
 
-void Particle::resetParticle()
+void Particle::setTexture(std::string texture)
+{
+	spriteComponent()->getSprite()->loadTexture(texture);
+}
+
+void Particle::setDimensions(float width, float height)
+{
+	spriteComponent()->getSprite()->width(width);
+	spriteComponent()->getSprite()->height(height);
+}
+
+void Particle::setVelocity(float v)
+{
+	velocity = v;
+}
+
+void Particle::setAngles(int m_a, int a_o, bool r_a)
+{
+	max_angle = m_a;
+	angle_offset = a_o;
+	randomise_angle = r_a;
+	resetAngle();
+}
+
+void Particle::setLifetime(float l)
+{
+	max_life_time = l;
+	life_time = 0;
+}
+
+void Particle::setOpacity(std::vector<float> t_o, std::vector<float> o_c_r)
+{
+	target_opacity = t_o;
+	opacity_change_rate = o_c_r;
+	opacity = target_opacity[0];
+
+}
+
+void Particle::setColour(std::vector<ASGE::Colour> colours, std::vector<float> c_c_r)
+{
+	target_colour = colours;
+	colour_change_rate = c_c_r;
+	spriteComponent()->getSprite()->colour(target_colour[0]);
+
+}
+
+void Particle::setEmitterType(int e_t, float donut_w)
+{
+	emitter_type = (EmitterType)e_t;
+	donut_width = donut_w;
+}
+
+void Particle::setEmitterPosDim(float e_x, float e_y, float e_l, float e_h)
+{
+	emitter.x = e_x;
+	emitter.y = e_y;
+	emitter.length = e_l;
+	emitter.height = e_h;
+	setEmitter();
+}
+
+
+void Particle::setEmitter()
 {
 	std::random_device rd;
-	std::uniform_real_distribution<float> x_dist(emitter.x, emitter.x + emitter.length);
-	std::uniform_real_distribution<float> y_dist(emitter.y, emitter.y + emitter.height);
-	spriteComponent()->getSprite()->xPos(x_dist(rd));
-	spriteComponent()->getSprite()->yPos(y_dist(rd));
+	if (emitter_type == RECTANGLE)
+	{
+		std::uniform_real_distribution<float> x_dist(emitter.x, emitter.x + emitter.length);
+		std::uniform_real_distribution<float> y_dist(emitter.y, emitter.y + emitter.height);
+		spriteComponent()->getSprite()->xPos(x_dist(rd));
+		spriteComponent()->getSprite()->yPos(y_dist(rd));
+	}
+	else if (emitter_type == CIRCLE || emitter_type == DONUT)
+	{
+		std::uniform_real_distribution<float> random(0, 359);
+		float randy = random(rd);
+		float xg = sin(randy / RADIAN) * emitter.length;
+		float yg = cos(randy / RADIAN) * emitter.length;
+		int minus_x = 1;
+		int minus_y = 1;
+		if (xg < 0)
+		{
+			minus_x = -1;
+			xg *= -1;
+		}
+		if (yg < 0)
+		{
+			minus_y = -1;
+			yg *= -1;
+		}
+		float pos[2];
+		if (emitter_type == CIRCLE)
+		{
+			std::uniform_real_distribution<float> x_dist(0, (int)xg);
+			std::uniform_real_distribution<float> y_dist(0, (int)yg);
+			pos[0] = x_dist(rd);
+			pos[1] = y_dist(rd);
+		}
+		else if (emitter_type == DONUT)
+		{
+			std::uniform_real_distribution<float> x_dist((int)xg - (int)donut_width, (int)xg);
+			std::uniform_real_distribution<float> y_dist((int)yg - (int)donut_width, (int)yg);
+			pos[0] = x_dist(rd);
+			pos[1] = y_dist(rd);
+		}
+		pos[0] *= minus_x;
+		pos[1] *= minus_y;
+
+		spriteComponent()->getSprite()->xPos(pos[0] + emitter.x);
+		spriteComponent()->getSprite()->yPos(pos[1] + emitter.y);
+	}
+}
+
+void Particle::resetParticle()
+{
+	setEmitter();
 	spriteComponent()->getSprite()->colour(target_colour[0]);
 
 	particleLifeTime(0);
@@ -178,8 +262,8 @@ void Particle::updateParticle(float dt_sec, float x_offset, float y_offset)
 		life_time += dt_sec;
 		//if (!skip)
 		//{
-		updateOpacity();
-		updateColour();
+			updateOpacity();
+			updateColour();
 		//}
 	}
 	if (particleLifeTime() >= max_life_time)
@@ -255,16 +339,6 @@ void Particle::updateOpacity()
 float Particle::lerp(float start_pos, float end_pos, float percent)
 {
 	return ((1 - percent) *  start_pos + percent * end_pos);
-}
-
-void Particle::particleActive(bool value)
-{
-	active = value;
-}
-
-bool Particle::particleActive()
-{
-	return active;
 }
 
 void Particle::particleLifeTime(float value)

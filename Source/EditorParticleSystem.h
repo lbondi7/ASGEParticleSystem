@@ -13,7 +13,8 @@ public:
 	bool init(ASGE::Renderer * renderer, ASGE::Input * input, int density, float e_r);
 	void update(float dt);
 	void render(ASGE::Renderer* renderer);
-	void updateParticleSystemValues(ASGE::Renderer * renderer, std::string texture, int density, float e_r, float width, float height, int m_a, int a_o, int r_a, float v, float l, float e_x, float e_y, float e_l, float e_h, std::vector<float> t_o, std::vector<float> o_c_r, std::vector<ASGE::Colour> colours, std::vector<float> c_c_r);
+	Particle * getParticle(int i);
+	void updateParticleSystemValues(ASGE::Renderer * renderer, int density, float e_r);
 
 private:
 

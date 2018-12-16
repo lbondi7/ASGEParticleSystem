@@ -58,56 +58,72 @@ bool FileSystem::getTxtFileContent(std::string type)
 	if (file.is_open())
 	{
 		while (getline(file, line)) {
-			if (line == "{")
+			int finder = line.find("{");
+			int finder2 = line.find("~");
+			if (finder > -1 || finder2 > -1)
 			{
 				continue;
-			}
-			else if (line == "}")
-			{
-				file.close();
 			}
 			else {
 				int index = line.find(':');
 				int index2 = -1;
 				std::string new_line = line.substr((index + 1), line.size());
-				index2 = new_line.find(',');
-				if (index2 > 0)
-				{
-					std::string value_1 = new_line.substr(0, (index2));
-					std::string value_2 = new_line.substr((index2 + 1), new_line.size());
-					int index3 = -1;
-					content.push_back(value_1);
-					index3 = value_2.find(",");
-					if (index3 > 0)
-					{
-						std::string value_3 = value_2.substr(index3 + 1, value_2.size());
-						int index4 = -1;
-						value_2 = value_2.substr(0, index3);
-						content.push_back(value_2);
-						index4 = value_3.find(",");
-						if (index4 > 0)
-						{
-							std::string value_4 = value_3.substr(index4 + 1, value_3.size());
-							value_3 = value_3.substr(0, index4);
-							content.push_back(value_3);
-							content.push_back(value_4);
-						}
-						else
-						{
-							content.push_back(value_3);
-						}
+				std::string file_data = "";
+				for (int i = 0; i < new_line.length(); ++i) {
+					if (new_line[i] != ',') {
+						file_data += new_line[i];
 					}
-					else
-					{
-						content.push_back(value_2);
+					else if(new_line[i] == ',') {
+						content.push_back(file_data);
+						file_data = "";
 					}
-				}
-				else
-				{
-					content.push_back(new_line);
+
+					if (i == new_line.length() - 1)
+					{
+						content.push_back(file_data);
+						file_data = "";
+					}
 				}
 			}
+				//index2 = new_line.find(',');
+				//if (index2 > 0)
+				//{
+				//	std::string value_1 = new_line.substr(0, (index2));
+				//	std::string value_2 = new_line.substr((index2 + 1), new_line.size());
+				//	int index3 = -1;
+				//	content.push_back(value_1);
+				//	index3 = value_2.find(",");
+				//	if (index3 > 0)
+				//	{
+				//		std::string value_3 = value_2.substr(index3 + 1, value_2.size());
+				//		int index4 = -1;
+				//		value_2 = value_2.substr(0, index3);
+				//		content.push_back(value_2);
+				//		index4 = value_3.find(",");
+				//		if (index4 > 0)
+				//		{
+				//			std::string value_4 = value_3.substr(index4 + 1, value_3.size());
+				//			value_3 = value_3.substr(0, index4);
+				//			content.push_back(value_3);
+				//			content.push_back(value_4);
+				//		}
+				//		else
+				//		{
+				//			content.push_back(value_3);
+				//		}
+				//	}
+				//	else
+				//	{
+				//		content.push_back(value_2);
+				//	}
+				//}
+				//else
+				//{
+				//	content.push_back(new_line);
+				//}
+			//}
 		}
+		file.close();
 		return true;
 	}
 	return false;
@@ -156,7 +172,7 @@ void FileSystem::getTxtFileContent()
 	}
 }
 
-bool FileSystem::createFile(std::string name, std::string texture, int density, float e_r, float width, float height, int m_a, int a_o, int r_a, float v, float l, float e_x, float e_y, float e_l, float e_h, std::vector<float> t_o, std::vector<float> o_c_r, std::vector<ASGE::Colour> colours, std::vector<float> c_c_r)
+bool FileSystem::createFile(std::string name)
 {
 	std::fstream file;
 	std::string file_name = "Resources\\TxtFiles\\FilePaths\\" + name + ".txt";
@@ -167,27 +183,35 @@ bool FileSystem::createFile(std::string name, std::string texture, int density, 
 		std::ofstream new_file(file_name);
 
 		std::string buffer;
-		buffer += "{";
-		buffer += "\namount:" + std::to_string(density);
-		buffer += "\nemission rate:" + std::to_string(e_r);
-		buffer += "\ntexture:" + texture;
-		buffer += "\ndimensions:" + std::to_string(width) + "," + std::to_string(height);
-		buffer += "\nvelocity:" + std::to_string(v);
-		buffer += "\nangle:" + std::to_string(m_a);
-		buffer += "\nangle offset:" + std::to_string(a_o);
-		buffer += "\nrandmise angle:" + std::to_string(r_a);
-		buffer += "\nmax_life_time:" + std::to_string(l);
-		buffer += "\nemitter pos:" + std::to_string(e_x) + "," + std::to_string(e_y);
-		buffer += "\nemitter dim:" + std::to_string(e_l) + "," + std::to_string(e_h);
-		buffer += "\nopacity over lifetime:" + std::to_string(t_o[0]) + "," + std::to_string(t_o[1]) + "," + std::to_string(t_o[2]);
-		buffer += "\nopacity rate of change:" + std::to_string(o_c_r[0]) + "," + std::to_string(o_c_r[1]);
-		buffer += "\ncolour rate of change:" + std::to_string(c_c_r[0]) + "," + std::to_string(c_c_r[1]) + "," + std::to_string(c_c_r[2]) + "," + std::to_string(c_c_r[3]);
-		buffer += "\ncolour 1:" + std::to_string(colours[0].r) + "," + std::to_string(colours[0].g) + "," + std::to_string(colours[0].b);
-		buffer += "\ncolour 2:" + std::to_string(colours[1].r) + "," + std::to_string(colours[1].g) + "," + std::to_string(colours[1].b);
-		buffer += "\ncolour 3:" + std::to_string(colours[2].r) + "," + std::to_string(colours[2].g) + "," + std::to_string(colours[2].b);
-		buffer += "\ncolour 4:" + std::to_string(colours[3].r) + "," + std::to_string(colours[3].g) + "," + std::to_string(colours[3].b);
-		buffer += "\ncolour 5:" + std::to_string(colours[4].r) + "," + std::to_string(colours[4].g) + "," + std::to_string(colours[4].b);
-		buffer += "\n}";
+
+		buffer += "{PARTICLE DATA}\n";
+		buffer += particle_system_buffer;
+		buffer += "~~~~~~~~~~~\n";
+		buffer += texture_buffer;
+		buffer += "~~~~~~~~~~~\n";
+		buffer += dimensions_buffer;
+		buffer += "~~~~~~~~~~~\n";
+		buffer += velocity_buffer;
+		buffer += "~~~~~~~~~~~\n";
+		buffer += direction_buffer;
+		buffer += "~~~~~~~~~~~\n";
+		buffer += lifetime_buffer;
+		buffer += "~~~~~~~~~~~\n";
+		buffer += opacity_buffer;
+		buffer += "~~~~~~~~~~~\n";
+		buffer += colour_buffer;
+
+		buffer += "~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		buffer += "~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		buffer += "~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+
+		buffer += "{EMITTER DATA}\n";
+		buffer += emitter_type_buffer;
+		buffer += "~~~~~~~~~~~\n";
+		buffer += emitter_position_buffer;
+		buffer += "~~~~~~~~~~~\n";
+		buffer += emitter_dimensions_buffer;
+		buffer += "~~~~~~~~~~~\n";
 
 		new_file << buffer << std::endl;
 		new_file.close();
@@ -256,4 +280,84 @@ bool FileSystem::checkFile(std::string file_name)
 		return true;
 	}
 	return false;
+}
+
+void FileSystem::particleSystemBuffer(int density, float emission_rate)
+{
+	particle_system_buffer = "{Particle System}\n";
+	particle_system_buffer += "amount:" + std::to_string(density) + ";\n";
+	particle_system_buffer += "emission rate:" + std::to_string(emission_rate) + ";\n";
+}
+
+void FileSystem::textureBuffer(std::string texture)
+{
+	texture_buffer = "{Texture}\n";
+	texture_buffer += "texture:" + texture + ";\n";
+}
+
+void FileSystem::dimensionsBuffer(float width, float height)
+{
+	dimensions_buffer = "{Dimensions}\n";
+	dimensions_buffer += "dimensions:" + std::to_string(width) + "," + std::to_string(height) + ";\n";
+}
+
+void FileSystem::velocitysBuffer(float velocity)
+{
+	velocity_buffer = "{Velocity}\n";
+	velocity_buffer += "velocity:" + std::to_string(velocity) + ";\n";
+}
+
+void FileSystem::directionBuffer(float max_angle, float angle_offset, int randomise_angle)
+{
+	direction_buffer = "{Direction(Angle)}\n";
+	direction_buffer += "angle:" + std::to_string(max_angle) + ";\n";
+	direction_buffer += "angle offset:" + std::to_string(angle_offset) + ";\n";
+	direction_buffer += "randomise angle:" + std::to_string(randomise_angle) + ";\n";
+}
+
+void FileSystem::lifetimeBuffer(float lifetime)
+{
+	lifetime_buffer = "{Lifetime}\n";
+	lifetime_buffer += "max_life_time:" + std::to_string(lifetime) + ";\n";
+}
+
+void FileSystem::opacityBuffer(std::vector<float> opacity, std::vector<float> opacity_change_rate)
+{
+	opacity_buffer = "{Opacity}\n";
+	opacity_buffer += "opacity over lifetime:" + std::to_string(opacity[0]) + "," + std::to_string(opacity[1]) + "," + std::to_string(opacity[2]) + ";\n";
+	opacity_buffer += "opacity rate of change:" + std::to_string(opacity_change_rate[0]) + "," + std::to_string(opacity_change_rate[1]) + ";\n";
+}
+
+void FileSystem::colourBuffer(std::vector<ASGE::Colour> colours, std::vector<float> colour_change_rate)
+{
+	colour_buffer = "{Colour}\n";
+	colour_buffer += "colour rate of change:" + std::to_string(colour_change_rate[0]) + "," + std::to_string(colour_change_rate[1]) + "," + std::to_string(colour_change_rate[2]) + "," + std::to_string(colour_change_rate[3]) + ";\n";
+	colour_buffer += "colour 1:" + std::to_string(colours[0].r) + "," + std::to_string(colours[0].g) + "," + std::to_string(colours[0].b) + ";\n";
+	colour_buffer += "colour 2:" + std::to_string(colours[1].r) + "," + std::to_string(colours[1].g) + "," + std::to_string(colours[1].b) + ";\n";
+	colour_buffer += "colour 3:" + std::to_string(colours[2].r) + "," + std::to_string(colours[2].g) + "," + std::to_string(colours[2].b) + ";\n";
+	colour_buffer += "colour 4:" + std::to_string(colours[3].r) + "," + std::to_string(colours[3].g) + "," + std::to_string(colours[3].b) + ";\n";
+	colour_buffer += "colour 5:" + std::to_string(colours[4].r) + "," + std::to_string(colours[4].g) + "," + std::to_string(colours[4].b) + ";\n";
+}
+
+void FileSystem::emitterTypeBuffer(std::string type, int type_value)
+{
+	emitter_type_buffer = "{Emitter Type}\n";
+	emitter_type_buffer += "emitter type(" + type + "):" + std::to_string(type_value) + ";\n";
+}
+
+void FileSystem::emitterPositionBuffer(float emitter_xpos, float emitter_ypos)
+{
+	emitter_position_buffer = "{Position}\n";
+	emitter_position_buffer += "emitter position:" + std::to_string(emitter_xpos) + "," + std::to_string(emitter_ypos) + ";\n";
+}
+
+void FileSystem::emitterDimensionsBuffer(float emitter_length, float emitter_height, float donut_width)
+{
+	emitter_dimensions_buffer = "{Dimensions}\n";
+	emitter_dimensions_buffer += "emitter dimensions:" + std::to_string(emitter_length) + "," + std::to_string(emitter_height) + "," + std::to_string(donut_width) + ";\n";
+}
+
+void FileSystem::emitterAngleBuffer(float emitter_length, float emitter_height)
+{
+
 }

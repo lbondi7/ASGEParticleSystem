@@ -1,0 +1,47 @@
+{PARTICLE DATA}
+{Particle System}
+amount:500
+emission rate:10.000000
+~~~~~~~~~~~
+{Texture}
+texture:Resources\Textures\PARTICLE.png
+~~~~~~~~~~~
+{Dimensions}
+dimensions:20.000000,20.000000
+~~~~~~~~~~~
+{Velocity}
+velocity:0.000000
+~~~~~~~~~~~
+{Direction(Angle)}
+angle:20.000000
+angle offset:0.000000
+randomise angle:0
+~~~~~~~~~~~
+{Lifetime}
+max_life_time:1.000000
+~~~~~~~~~~~
+{Opacity}
+opacity over lifetime:1.000000,1.000000,1.000000
+opacity rate of change:10.000000,1.000000
+~~~~~~~~~~~
+{Colour}
+colour rate of change:1.000000,1.000000,1.000000,1.000000
+colour 1:1.000000,1.000000,1.000000
+colour 2:1.000000,1.000000,1.000000
+colour 3:1.000000,1.000000,1.000000
+colour 4:1.000000,1.000000,1.000000
+colour 5:1.000000,1.000000,1.000000
+~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+{EMITTER DATA}
+{Emitter Type}
+emitter type(donut):2
+~~~~~~~~~~~
+{Position}
+emitter position:847.000000,607.000000
+~~~~~~~~~~~
+{Dimensions}
+emitter dimensions:100.000000,20.000000,10.000000
+~~~~~~~~~~~
+

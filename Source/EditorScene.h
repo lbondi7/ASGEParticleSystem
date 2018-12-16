@@ -7,23 +7,22 @@ class EditorScene :
 {
 public:
 	EditorScene() = default;
-	virtual ~EditorScene();
+	~EditorScene();
 
-	virtual bool init(ASGE::Renderer* renderer, ASGE::Input* input, std::vector<std::string> file_names) override;
-	virtual Scene::NextScene update(float dt) override;
-	virtual void render(ASGE::Renderer* renderer) override;
-	virtual std::string addFilename() override;
-	virtual void keyHandler(const ASGE::KeyEvent* event) override;
-	virtual void clickHandler(const ASGE::ClickEvent* event) override;
-	virtual void scrollHandler(const ASGE::ScrollEvent* event) override;
-
-	std::string displayColour(float red, float green, float blue);
-
-	bool changeColour(std::string colour, int para);
+	bool init(ASGE::Renderer* renderer, ASGE::Input* input, std::vector<std::string> file_names) override;
+	Scene::NextScene update(float dt) override;
+	void render(ASGE::Renderer* renderer) override;
+	std::string addFilename() override;
+	void keyHandler(const ASGE::KeyEvent* event) override;
+	void clickHandler(const ASGE::ClickEvent* event) override;
+	void scrollHandler(const ASGE::ScrollEvent* event) override;
 
 private:
 	void setValues(int value);
-
+	void colourButtonsClicked(double x_pos, double y_pos, int &check);
+	void textureButtonsClicked(double x_pos, double y_pos, int &check);
+	void parameterButtonsClicked(int i, int &check);
+	void menuButtonsClicked(int i, int &check);
 
 	ASGE::Input* input = nullptr;
 	ASGE::Renderer * scene_ren = nullptr;
@@ -36,76 +35,108 @@ private:
 
 	Action current_action = NONE;
 
-	std::unique_ptr<EditorParticleSystem> particle_system = nullptr;
-	std::unique_ptr<GameObject> emitter_point = nullptr;
-	std::unique_ptr<GameObject> objects = nullptr;
-	std::vector<GameObject> texturez;
-	std::vector<GameObject> buttons;
-	std::unique_ptr<GameObject> colours[5]{ nullptr };
-	std::unique_ptr<GameObject> colours_ui[146]{ nullptr };
+	using GameObjectVector = std::vector<GameObject>;
+	using GameObjectPointer = std::unique_ptr<GameObject>;
+	using FloatVector = std::vector<float>;
+	using String2DVector = std::vector<std::vector<std::string>>;
+	GameObjectVector emitter_shapes;
+	GameObjectVector texturez;
+	std::vector<GameObjectVector> parameter_buttons;
+	GameObjectPointer menu_buttons[5];
+	GameObjectPointer colours[5]{ nullptr };
+	GameObjectPointer colours_ui[146]{ nullptr };
+	GameObjectPointer emitter_point = nullptr;
 	int num_of_colours = 146;
+	std::unique_ptr<EditorParticleSystem> particle_system = nullptr;
 	std::vector<std::string> textures;
 
 	bool pause = false;
 
-	std::string user_input = " ";
-	std::vector<std::vector<std::string>> parameter_names{ { "Particle Density: " },
+	enum ParticleParameters {
+		P_DENSITY = 0,
+		P_EMISSION_RATE = 1,
+		P_DIMENSIONS = 2,
+		P_ANGLES = 3,
+		P_VELOCITY = 4,
+		P_LIFETIME = 5,
+		P_OPACITY = 6,
+		P_OPACITY_RATE = 7,
+		P_COLOUR_RATE = 8,
+		P_COLOURS = 9,
+		P_TEXTURE = 10,
+	};
+
+	ParticleParameters particle_parameters = P_DENSITY;
+
+	enum EmitterParameters {
+		E_TYPE = 0,
+		E_POSITION = 1,
+		E_DIMENSIONS = 2,
+		E_ANGLE = 3,
+	};
+
+	EmitterParameters emitter_parameters = E_TYPE;
+
+	enum Buttons {
+		PARTICLE = 0,
+		EMITTER = 1,
+		FILENAME = 2,
+		SAVE = 3,
+		EXIT = 4
+	};
+
+	Buttons button = PARTICLE;
+
+	String2DVector parameter_names[3]{ { { "Particle Density: " },
 	{ "Emission Rate: " },
 	{ "Particle Width: ", "Particle Height: " },
 	{ "Max Angle: ", "Angle Offset: ", "Randomise Angle: " },
 	{ "Velocity: " },
 	{ "Life Time: " },
-	{ "Emitter Xpos: ","Emitter Ypos: ", "Emitter Length: ", "Emitter Height: " },
 	{ "Start Opacity: ","Mid Opacity: ","End Opacity: " },
 	{ "Opacity Change Rate 1:", "Opacity Change Rate 2:" },
-	{ "Colour Change Rate 1:", "Colour Change Rate 2:", "Colour Change Rate 3:", "Colour Change Rate 4: " },
-	{ "Colour 1:", "Colour 2:", "Colour 3:", "Colour 4:", "Colour 5:" },
-	{ "Texture: " },
-	{ "File Name: " } };
+	{ "Colour Change Rate 1:", "Colour Change Rate 2:", "Colour Change Rate 3:", "Colour Change Rate 4: " } },
 
-	std::vector<float> parameter_values [11];
+	{ { " " },
+	{ "Emitter Xpos: ", "Emitter Ypos: " },
+	{ "Emitter Width: ", "Emitter Height: ", "Donut Width: " },
+	{ "Max Angle: ", "Angle Offset: " } },
 
-	enum Parameters {
-		DENSITY = 0,
-		EMISSION_RATE = 1,
-		DIMENSIONS = 2,
-		ANGLES = 3,
-		VELOCITY = 4,
-		LIFETIME = 5,
-		EMITTER = 6,
-		OPACITY = 7,
-		OPACITY_RATE = 8,
-		COLOUR_RATE = 9,
-		COLOURS = 10,
-		TEXTURE = 11,
-		FILENAME = 12,
-		SAVE = 13,
-		EXIT = 14
-	};
+	{ { "Filename: " } } };
 
-	std::string button_names[16]{ "Density","Emission Rate","Particle Dimensions","Angle","Velocity","Life Time", "Emitter","Opacity", "Opacity Change Rate","Colour Change Rate" , "Colours" , "Texture" ,"File Name","Save","Exit" };
+	std::vector<FloatVector> parameter_values[2];
 
-	Parameters parameters = DENSITY;
+	std::string m_btn_names[5]{ "Particle","Emitter","File Name","Save","Exit" };
+	std::string p_btn_names[11]{ "Density","Emission Rate","Dimensions","Angle","Velocity","Lifetime","Opacity", "Opacity Change Rate","Colour Change Rate" , "Colours" , "Texture" };
+	std::string e_btn_names[4]{ "Type","Position","Dimensions","Angle"};
 	int parameter_amount[2]{ 0, 0 };
-	int size_of_vector[SAVE]{ 0, 0, 1, 2, 0, 0, 3, 2, 1, 3, 4, 0, 0 };
+	std::string user_input = "";
 
 	//particle parameters
-	int density = 200;
-	float emission_rate = 5;
-	float particle_width = 1.0f;
+	std::string texture_name = "Resources\\Textures\\PARTICLE.png";
+	int density = 2000;
+	float emission_rate = 1000.0f;
+	float particle_width = 20.0f;
 	float particle_height = 20.0f;
 	float max_angle = 20.0f;
 	float angle_offset = 0.0f;
 	bool randomise_angle = false;
-	float velocity = 300.0f;
+	float velocity = 0.0f;
 	float max_life_time = 1.0f;
 	std::vector<float> target_opacity{ 1.0f, 1.0f, 1.0f };
 	std::vector<float> opacity_change_rate{ 10.0f, 1.0f };
-	std::vector<ASGE::Colour> target_colour{ ASGE::COLOURS::YELLOW, ASGE::COLOURS::ORANGE, ASGE::COLOURS::RED, ASGE::COLOURS::BLUE, ASGE::COLOURS::GREEN };
+	std::vector<ASGE::Colour> target_colour{ ASGE::COLOURS::WHITE, ASGE::COLOURS::WHITE, ASGE::COLOURS::WHITE, ASGE::COLOURS::WHITE, ASGE::COLOURS::WHITE };
 	std::vector<float> colour_change_rate{ 1.0f, 1.0f, 1.0f, 1.0f };
+
+	//emitter parameters
+	int emitter_type = 0;
+	float donut_width = 50.0f;
 	rect emitter;
+	float emitter_angle = 0.0f;
+	std::string shape = "rectangle";
+
+	//file
 	std::string file_name = "";
-	std::string texture_name = "Resources\\Textures\\PARTICLE.png";
 
 	float counter = 0.0f;
 	bool show_marker = true;

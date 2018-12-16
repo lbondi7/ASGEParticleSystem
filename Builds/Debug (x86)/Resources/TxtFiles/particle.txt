@@ -1,0 +1,11 @@
+{
+texture:Resources\Textures\blankTexture.png
+dimensions:3,10
+velocity:500.0
+angle:0
+randomise angle:0
+randmise:0
+max_life_time:2.0
+emitter pos:100,100
+emitter dim:200,1
+}

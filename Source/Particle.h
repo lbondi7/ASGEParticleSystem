@@ -12,7 +12,27 @@ public:
 
 	void createParticle(ASGE::Renderer * renderer, FileSystem file);
 
-	void alterParticle(ASGE::Renderer* renderer, std::string texture, float width, float height, float v, int m_a, int a_o, bool r_a, float l, float e_x, float e_y, float e_l, float e_h, std::vector<float> t_o, std::vector<float> o_c_r, std::vector<ASGE::Colour> colours, std::vector<float> c_c_r);
+	void alterParticle(std::string texture, float width, float height, float v, int m_a, int a_o, bool r_a, float l, float e_x, float e_y, float e_l, float e_h, std::vector<float> t_o, std::vector<float> o_c_r, std::vector<ASGE::Colour> colours, std::vector<float> c_c_r);
+
+	void setTexture(std::string texture);
+		
+	void setDimensions(float width, float height);
+		
+	void setVelocity(float v);
+		
+	void setAngles(int m_a, int a_o, bool r_a);
+		 
+	void setLifetime(float l);
+		 
+	void setOpacity(std::vector<float> t_o, std::vector<float> o_c_r);
+		 
+	void setColour(std::vector<ASGE::Colour> colours, std::vector<float> c_c_r);
+		
+	void setEmitterType(int e_t, float donut_width);
+		 
+	void setEmitterPosDim(float e_x, float e_y, float e_l, float e_h);
+
+	void setEmitter();
 
 	void resetParticle();
 
@@ -23,10 +43,6 @@ public:
 	void updateOpacity();
 
 	float lerp(float start_pos, float end_pos, float percent);
-
-	void particleActive(bool value);
-
-	bool particleActive();
 
 	void particleLifeTime(float value);
 
@@ -58,7 +74,15 @@ private:
 	std::vector<float> opacity_change_rate{ 0.0f, 0.0f };
 	std::vector<ASGE::Colour> target_colour{ ASGE::COLOURS::WHITE, ASGE::COLOURS::WHITE, ASGE::COLOURS::WHITE, ASGE::COLOURS::WHITE, ASGE::COLOURS::WHITE };
 	std::vector<float> colour_change_rate{ 1.0f, 1.0f, 1.0f, 1.0f };
-	bool active = false;
+
+	enum EmitterType {
+		RECTANGLE = 0,
+		CIRCLE = 1,
+		DONUT = 2,
+		SEMI_CIRCLE = 3
+	};
+	EmitterType emitter_type = RECTANGLE;
+	float donut_width = 0.0f;
 	rect emitter;
 	int opacity_index = 0;
 	int colour_index = 0;

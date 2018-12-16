@@ -58,6 +58,16 @@ std::string GameObject::getTexture()
 	return texture;
 }
 
+void GameObject::Active(bool value)
+{
+	active = value;
+}
+
+bool GameObject::Active()
+{
+	return active;
+}
+
 //void GameObject::dampness(float value)
 //{
 //	damp = value;
